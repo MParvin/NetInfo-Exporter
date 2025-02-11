@@ -1,0 +1,27 @@
+checks:
+  ping:
+    - target: "8.8.8.8"
+      timeout: 5s
+    - target: "1.1.1.1"
+      timeout: 5s
+
+  port:
+    - target: "example.com"
+      port: 443
+      timeout: 5s
+    - target: "localhost"
+      port: 80
+      timeout: 3s
+
+  url:
+    - target: "https://example.com"
+      method: "GET"
+      timeout: 10s
+      expected_status: 200
+      verify_ssl: true
+
+  dns:
+    - target: "example.com"
+      record_type: "A"
+      nameserver: "8.8.8.8:53"
+      timeout: 5s
