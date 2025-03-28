@@ -2,8 +2,8 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
-
+    tags:
+      - '*'
 env:
   IMAGE_NAME: "mparvin/netinfo-exporter:latest"
 
