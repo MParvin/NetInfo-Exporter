@@ -1,10 +1,9 @@
 /*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-
+Copyright © 2024 NAME HERE mparvin@parsops.com
 */
 package main
 
-import "github.com/mparvin/cobra-template/cmd"
+import "github.com/mparvin/netinfo-exporter/cmd"
 
 func main() {
 	cmd.Execute()
