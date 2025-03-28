@@ -59,6 +59,15 @@ releases: linux-amd64 linux-arm64 macos-amd64 macos-arm64 win64 win32
 clean:
 	rm $(BINDIR)/*
 
+
+tag:
+	@if [ -z "$(TAG)" ]; then \
+		echo "Error: TAG variable is not set. Use 'make tag TAG=v1.0.0'"; \
+		exit 1; \
+	fi
+	git tag $(TAG)
+	git push origin $(TAG)
+
 # Remove trailing {} from the release upload url
 GITHUB_UPLOAD_URL=$(shell echo $${GITHUB_RELEASE_UPLOAD_URL%\{*})
 
