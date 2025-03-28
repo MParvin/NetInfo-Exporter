@@ -5,7 +5,7 @@ on:
     tags:
       - '*'
 env:
-  IMAGE_NAME: "mparvin/netinfo-exporter:latest"
+  IMAGE_NAME: "mparvin/netinfo-exporter"
 
 jobs:
   build:
@@ -24,5 +24,14 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ env.IMAGE_NAME }}
+        tags: |
+          ${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+        file: Dockerfile
+
+    - name: Build and push on latest version
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: |
+          ${{ env.IMAGE_NAME }}:latest
         file: Dockerfile
