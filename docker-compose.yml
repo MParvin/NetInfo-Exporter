@@ -1,0 +1,12 @@
+services:
+  netinfo-exporter:
+    image: mparvin/netinfo-exporter:latest
+    container_name: netinfo-exporter
+    ports:
+      - "9876:9876"
+    environment:
+      - CONFIG_FILE=/app/config.yml
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+    restart: unless-stopped
+    command: --config /app/config.yml
