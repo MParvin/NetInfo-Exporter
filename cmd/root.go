@@ -1,34 +1,46 @@
 /*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-
+Copyright © 2024 NAME HERE mparvin@parsops.com
 */
 package cmd
 
 import (
+	"fmt"
+	"log"
 	"os"
 
+	"github.com/mparvin/netinfo-exporter/config"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
+var (
+	cfgFile           string
+	listenAddress     string
+	defaultListenAddr = ":9876"
+)
 
-
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "cobra-template",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Use:   "netinfo_exporter",
+	Short: "NetInfo Exporter is a Prometheus exporter for monitoring network health and performance",
+	Long: `NetInfo Exporter performs various network checks including ping, port availability,
+URL health, and DNS lookups. It provides Prometheus metrics for monitoring.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if cfgFile == "" {
+			log.Fatal("Configuration file is required. Use --config to specify the path.")
+		}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+		cfg, err := config.LoadConfig(cfgFile) // Load the configuration
+		if err != nil {
+			log.Fatalf("Failed to load configuration: %v", err)
+		}
+
+		fmt.Printf("Starting NetInfo Exporter on %s with config: %s\n", cfg.ListenAddress, cfgFile)
+
+		// Start the Prometheus metrics exporter
+		startExporter(*cfg)
+	},
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -37,15 +49,9 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "Path to the configuration file (required)")
+	rootCmd.PersistentFlags().StringVar(&listenAddress, "web.listen-address", defaultListenAddr, "Address to listen on for Prometheus metrics")
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra-template.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
+	viper.BindPFlag("web.listen-address", rootCmd.PersistentFlags().Lookup("web.listen-address"))
 }
-
-
