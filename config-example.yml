@@ -1,27 +1,32 @@
-checks:
-  ping:
-    - target: "8.8.8.8"
-      timeout: 5s
-    - target: "1.1.1.1"
-      timeout: 5s
+listen_address: ":9876"
 
-  port:
-    - target: "example.com"
-      port: 443
-      timeout: 5s
-    - target: "localhost"
-      port: 80
-      timeout: 3s
+ping:
+  - target: "8.8.8.8"
+    timeout: 5s
+  - target: "1.1.1.1"
+    timeout: 5s
 
-  url:
-    - target: "https://example.com"
-      method: "GET"
-      timeout: 10s
-      expected_status: 200
-      verify_ssl: true
+port:
+  - target: "example.com"
+    port: 443
+    timeout: 5s
+  - target: "localhost"
+    port: 80
+    timeout: 3s
 
-  dns:
-    - target: "example.com"
-      record_type: "A"
-      nameserver: "8.8.8.8:53"
-      timeout: 5s
+url:
+  - target: "https://example.com"
+    method: "GET"
+    timeout: 10s
+    expected_status: 200
+    verify_ssl: true
+
+dns:
+  - target: "google.com"
+    record_type: "A"
+    nameserver: "8.8.8.8:53"
+    timeout: 5s
+  - target: "parsops.com"
+    record_type: "MX"
+    nameserver: "1.1.1.1:53"
+    timeout: 5s
